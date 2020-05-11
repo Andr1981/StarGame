@@ -1,67 +1,72 @@
 package ru.geekbrains.screen;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
+
 import ru.geekbrains.base.BaseScreen;
+import ru.geekbrains.math.Rect;
+import ru.geekbrains.sprite.Background;
+import ru.geekbrains.sprite.ExitButton;
+import ru.geekbrains.sprite.PlayButton;
 
 public class MenuScreen extends BaseScreen {
-    private Texture backGround;
+    private Texture backScreen, menuButtons;
     private Texture badlogic;
-    private Vector2 posBadlogic, newPosBadlogic, velBadlogic, deltaBadlogic;
+    private Background background;
+    private PlayButton playButton;
+    private ExitButton exitButton;
 
     @Override
     public void show() {
         super.show();
-        backGround = new Texture("background.jpg");
-        badlogic = new Texture("badlogic.jpg");
-        posBadlogic = new Vector2(10, 10);
-        newPosBadlogic = new Vector2(posBadlogic);
-        velBadlogic = new Vector2(0, 0);
-        deltaBadlogic = new Vector2(0, 0);
-
+        backScreen = new Texture("background.jpg");
+        background = new Background(backScreen,getScreenController());
+        menuButtons = new Texture("menuAtlas.png");
+        background = new Background(backScreen, getScreenController());
+        exitButton = new ExitButton(new TextureRegion(menuButtons, 0, 0, 256, 256), getScreenController());
+        playButton = new PlayButton(new TextureRegion(menuButtons, 0, 256, 256, 270), getScreenController());
     }
 
+    @Override
+    public void resize(Rect worldBounds) {
+        super.resize(worldBounds);
+        background.resize(worldBounds);
+        exitButton.resize(worldBounds);
+        playButton.resize(worldBounds);
+    }
 
     @Override
     public void render(float delta) {
+        super.render(delta);
         batch.begin();
-        batch.draw(backGround, 0,0);
-        if (!stopMove())
-            posBadlogic.add(velBadlogic);
-        batch.draw(badlogic, posBadlogic.x, posBadlogic.y, 150, 150);
+        background.draw(batch);
+        exitButton.draw(batch);
+        playButton.draw(batch);
         batch.end();
     }
 
-    private void calcNewVelocity() {
-        velBadlogic.set(newPosBadlogic.x - posBadlogic.x, newPosBadlogic.y - posBadlogic.y).nor();
-    }
-
-    private boolean stopMove() {
-        deltaBadlogic.set(newPosBadlogic.x - posBadlogic.x, newPosBadlogic.y - posBadlogic.y);
-        if (velBadlogic.len2() > 0 && velBadlogic.len2() >= deltaBadlogic.len2()) {
-            posBadlogic.set(newPosBadlogic);
-            velBadlogic.set(0, 0);
-            deltaBadlogic.set(0, 0);
-            return true;
-        }
-        if (deltaBadlogic.len2() > 0)
-            velBadlogic.scl(1.1f);
-        return false;
-    }
-
-    @Override
-    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        newPosBadlogic.set(screenX, Gdx.graphics.getHeight() - screenY);
-        calcNewVelocity();
-        return false;
-    }
 
     @Override
     public void dispose() {
+
+        backScreen.dispose();
+        menuButtons.dispose();
         super.dispose();
-        backGround.dispose();
-        badlogic.dispose();
+    }
+
+    @Override
+    public boolean touchDown(Vector2 touch, int pointer, int button) {
+        exitButton.touchDown(touch, pointer, button);
+        playButton.touchDown(touch, pointer, button);
+        return false;
+    }
+
+    @Override
+    public boolean touchUp(Vector2 touch, int pointer, int button) {
+        exitButton.touchUp(touch, pointer, button);
+        playButton.touchUp(touch, pointer, button);
+        return false;
     }
 }
