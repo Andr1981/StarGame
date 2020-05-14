@@ -31,8 +31,8 @@ public class Logo extends Sprite {
             pos.add(velocity);
         else{
             pos.set(newPos);
-            velocity.set(0,0);
-            common.set(0,0);
+            velocity.setZero();
+            common.setZero();
         }
 
         super.draw(batch);
