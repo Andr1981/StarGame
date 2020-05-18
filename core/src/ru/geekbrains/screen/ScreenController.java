@@ -1,8 +1,10 @@
 package ru.geekbrains.screen;
 
+
 import ru.geekbrains.StarGame;
 
 public class ScreenController {
+
     private final StarGame starGame;
     private MenuScreen menuScreen;
     private GameScreen gameScreen;
@@ -25,4 +27,5 @@ public class ScreenController {
         }
         starGame.setScreen(gameScreen);
     }
+
 }
