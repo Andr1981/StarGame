@@ -7,7 +7,6 @@ import ru.geekbrains.base.Sprite;
 import ru.geekbrains.math.Rect;
 import ru.geekbrains.math.Rnd;
 
-
 public class Star extends Sprite {
 
     private Vector2 v;

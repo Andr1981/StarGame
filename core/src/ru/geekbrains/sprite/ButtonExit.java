@@ -5,7 +5,6 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 
 import ru.geekbrains.base.ScaledButton;
 import ru.geekbrains.math.Rect;
-;
 
 public class ButtonExit extends ScaledButton {
 

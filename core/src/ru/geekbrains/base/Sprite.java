@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.Vector2;
 
 import ru.geekbrains.math.Rect;
 import ru.geekbrains.screen.ScreenController;
+import ru.geekbrains.utils.Regions;
 
 
 public class Sprite extends Rect {
@@ -14,14 +15,18 @@ public class Sprite extends Rect {
     protected TextureRegion[] regions;
     protected int frame;
     protected ScreenController screenController;
+    protected boolean destroyed;
 
     public Sprite(TextureRegion region) {
         this.regions = new TextureRegion[1];
         this.regions[0] = region;
     }
 
-    public Sprite(TextureRegion[] regions){
-        this.regions = regions;
+    public Sprite(TextureRegion region, int rows, int cols, int frames){
+        this.regions = Regions.split(region, rows, cols, frames);
+    }
+
+    public Sprite() {
     }
 
     public void setScreenController(ScreenController screenController) {
@@ -88,5 +93,17 @@ public class Sprite extends Rect {
 
     public void setScale(float scale) {
         this.scale = scale;
+    }
+
+    public boolean isDestroyed() {
+        return destroyed;
+    }
+
+    public void destroy(){
+        destroyed = true;
+    }
+
+    public void flushDestroy(){
+        destroyed = false;
     }
 }
