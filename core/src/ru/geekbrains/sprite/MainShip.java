@@ -2,13 +2,10 @@ package ru.geekbrains.sprite;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
 import ru.geekbrains.base.Ship;
-import ru.geekbrains.base.Sprite;
 import ru.geekbrains.math.Rect;
 import ru.geekbrains.pool.BulletPool;
 import ru.geekbrains.pool.ExplosionPool;
@@ -19,7 +16,7 @@ public class MainShip extends Ship {
     private static final float MARGIN = 0.05f;
     private static final float VELOCITY = 0.5f;
     private static final int INVALID_POINTER = -1;
-    private static final int HEALTH_POINTS = 100;
+    private static final int HEALTH_POINTS = 10;
 
     private int leftPointer, rightPointer;
     private boolean pressedLeft, pressedRight;
@@ -39,12 +36,25 @@ public class MainShip extends Ship {
         this.reloadInterval = 0.25f;
         this.reloadTimer = this.reloadInterval;
         this.healthPoints = HEALTH_POINTS;
+    }
 
+    public void initialize(){
+        this.leftPointer = INVALID_POINTER;
+        this.rightPointer = INVALID_POINTER;
+        this.reloadTimer = this.reloadInterval;
+        this.healthPoints = HEALTH_POINTS;
+        this.pos.set(0, pos.y);
+        this.pressedLeft = false;
+        this.pressedRight = false;
+        this.destroyed = false;
+        stop();
     }
 
     @Override
     public void update(float delta) {
         super.update(delta);
+        bulletPos.set(pos.x, pos.y + getHalfHeight());
+        autoShoot(delta);
 
         if(getLeft() < worldBounds.getLeft()){
             stop();
@@ -64,13 +74,21 @@ public class MainShip extends Ship {
         setBottom(worldBounds.getBottom() + MARGIN);
     }
 
+    public boolean isBulletCollision(Bullet bullet){
+        return !(bullet.getRight() < getLeft()
+                || bullet.getLeft()  > getRight()
+                || bullet.getBottom() > pos.y
+                || bullet.getTop() < getBottom()
+        );
+    }
+
     public void dispose(){
         shootSound.dispose();
     }
 
     @Override
     public boolean touchDown(Vector2 touch, int pointer, int button) {
-        if(touch.x < worldBounds.pos.x) {
+        if(touch.x < pos.x) {
             if (leftPointer != INVALID_POINTER) {
                 return false;
             }

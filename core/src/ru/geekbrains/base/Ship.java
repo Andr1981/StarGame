@@ -13,6 +13,8 @@ import ru.geekbrains.sprite.Explosion;
 
 public class Ship extends Sprite {
 
+    private static final float DAMAGE_ANIMATE_INTERVAL = 0.1f;
+
     protected Vector2 vel, velStart;
 
     protected Rect worldBounds;
@@ -23,19 +25,25 @@ public class Ship extends Sprite {
     protected Vector2 bulletVelocity;
     protected float bulletHeight;
     protected int bulletDamage;
+    protected Vector2 bulletPos;
 
     protected int healthPoints;
+    protected int damage;
 
     protected float reloadInterval;
     protected float reloadTimer;
 
     protected Sound shootSound;
+    private float damageAnimateTimer;
 
     public Ship(TextureRegion region, int rows, int cols, int frames) {
         super(region, rows, cols, frames);
 
         this.velStart = new Vector2();
         this.vel = new Vector2();
+
+        this.bulletPos = new Vector2();
+        this.damageAnimateTimer = DAMAGE_ANIMATE_INTERVAL;
     }
 
     public Ship(BulletPool bulletPool, ExplosionPool explosionPool, Rect worldBounds, Sound shootSound) {
@@ -46,6 +54,8 @@ public class Ship extends Sprite {
         this.vel = new Vector2();
         this.shootSound = shootSound;
         this.bulletVelocity = new Vector2();
+        this.bulletPos = new Vector2();
+        this.damageAnimateTimer = DAMAGE_ANIMATE_INTERVAL;
     }
 
     @Override
@@ -57,8 +67,15 @@ public class Ship extends Sprite {
     public void update(float delta) {
         super.update(delta);
         pos.mulAdd(vel, delta);
+        damageAnimateTimer += delta;
+        if(damageAnimateTimer >= DAMAGE_ANIMATE_INTERVAL){
+            frame = 0;
+        }
+    }
+
+    public void autoShoot(float delta){
         reloadTimer += delta;
-        if (reloadTimer >= reloadInterval && getTop() <= worldBounds.getTop()){
+        if (reloadTimer >= reloadInterval){
             reloadTimer = 0f;
             shoot();
         }
@@ -68,7 +85,7 @@ public class Ship extends Sprite {
         Bullet bullet = bulletPool.obtain();
         bullet.set(this,
                 bulletRegion,
-                pos,
+                bulletPos,
                 bulletVelocity,
                 bulletHeight,
                 worldBounds,
@@ -86,6 +103,20 @@ public class Ship extends Sprite {
     private void boom(){
         Explosion explosion = explosionPool.obtain();
         explosion.set(getHeight(), pos);
+    }
+
+    public void damage(int damage){
+        damageAnimateTimer = 0f;
+        frame = 1;
+        healthPoints -= damage;
+        if(healthPoints <= 0){
+            healthPoints = 0;
+            destroy();
+        }
+    }
+
+    public int getDamage(){
+        return damage;
     }
 
     public int getHealthPoints() {
