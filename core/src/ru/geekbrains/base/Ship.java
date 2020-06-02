@@ -36,6 +36,8 @@ public class Ship extends Sprite {
     protected Sound shootSound;
     private float damageAnimateTimer;
 
+    protected boolean giveBonus;
+
     public Ship(TextureRegion region, int rows, int cols, int frames) {
         super(region, rows, cols, frames);
 
@@ -44,6 +46,7 @@ public class Ship extends Sprite {
 
         this.bulletPos = new Vector2();
         this.damageAnimateTimer = DAMAGE_ANIMATE_INTERVAL;
+        this.giveBonus = false;
     }
 
     public Ship(BulletPool bulletPool, ExplosionPool explosionPool, Rect worldBounds, Sound shootSound) {
@@ -56,6 +59,7 @@ public class Ship extends Sprite {
         this.bulletVelocity = new Vector2();
         this.bulletPos = new Vector2();
         this.damageAnimateTimer = DAMAGE_ANIMATE_INTERVAL;
+        this.giveBonus = false;
     }
 
     @Override
@@ -91,7 +95,9 @@ public class Ship extends Sprite {
                 worldBounds,
                 bulletDamage
         );
-        shootSound.play();
+        if(getScreenController().isEffects()) {
+            shootSound.play();
+        }
     }
 
     @Override
@@ -125,5 +131,9 @@ public class Ship extends Sprite {
 
     public void setHealthPoints(int healthPoints) {
         this.healthPoints = healthPoints;
+    }
+
+    public boolean isGiveBonus() {
+        return giveBonus;
     }
 }

@@ -41,7 +41,8 @@ public class Enemy extends Ship {
             float reloadInterval,
             float height,
             int healthPoints,
-            int damage
+            int damage,
+            boolean giveBonus
     ){
         this.regions = regions;
         this.velStart.set(velStart);
@@ -55,6 +56,8 @@ public class Enemy extends Ship {
         this.healthPoints = healthPoints;
         this.damage = damage;
         setHeightProportion(height);
+        this.frame = 0;
+        this.giveBonus = giveBonus;
     }
 
     public boolean isBulletCollision(Bullet bullet){

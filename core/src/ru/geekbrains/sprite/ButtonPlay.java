@@ -8,7 +8,7 @@ import ru.geekbrains.math.Rect;
 
 public class ButtonPlay extends ScaledButton {
 
-    private static final float MARGIN = 0.05f;
+    private static final float MARGIN = 0.025f;
 
     public ButtonPlay(TextureAtlas atlas) {
         super(atlas.findRegion("btPlay"));
@@ -21,8 +21,6 @@ public class ButtonPlay extends ScaledButton {
 
     @Override
     public void resize(Rect worldBounds) {
-        setHeightProportion(0.2f);
-        setBottom(worldBounds.getBottom() + MARGIN);
-        setLeft(worldBounds.getLeft() + MARGIN);
+        setHeightProportion(0.1f);
     }
 }
