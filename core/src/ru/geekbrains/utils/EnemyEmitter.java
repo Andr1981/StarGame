@@ -24,6 +24,7 @@ public class EnemyEmitter {
     private static final float ENEMY_SMALL_BULLET_VEL_Y = -0.3f;
     private static final int ENEMY_SMALL_BULLET_DAMAGE = 1;
     private static final float ENEMY_SMALL_RELOAD_INTERVAL = 2f;
+    private static final int ENEMY_SMALL_DAMAGE = 1;
 
     private static final float ENEMY_MEDIUM_HEIGHT = 0.15f;
     private static final int ENEMY_MEDIUM_HEALTH_POINTS = 5;
@@ -31,6 +32,7 @@ public class EnemyEmitter {
     private static final float ENEMY_MEDIUM_BULLET_VEL_Y = -0.25f;
     private static final int ENEMY_MEDIUM_BULLET_DAMAGE = 5;
     private static final float ENEMY_MEDIUM_RELOAD_INTERVAL = 4f;
+    private static final int ENEMY_MEDIUM_DAMAGE = 3;
 
     private static final float ENEMY_BIG_HEIGHT = 0.2f;
     private static final int ENEMY_BIG_HEALTH_POINTS = 10;
@@ -38,6 +40,7 @@ public class EnemyEmitter {
     private static final float ENEMY_BIG_BULLET_VEL_Y = -0.3f;
     private static final int ENEMY_BIG_BULLET_DAMAGE = 10;
     private static final float ENEMY_BIG_RELOAD_INTERVAL = 1f;
+    private static final int ENEMY_BIG_DAMAGE = 5;
 
     private final TextureRegion[] enemySmallRegions;
     private final Vector2 enemySmallVelocity;
@@ -78,7 +81,8 @@ public class EnemyEmitter {
                         ENEMY_SMALL_BULLET_DAMAGE,
                         ENEMY_SMALL_RELOAD_INTERVAL,
                         ENEMY_SMALL_HEIGHT,
-                        ENEMY_SMALL_HEALTH_POINTS
+                        ENEMY_SMALL_HEALTH_POINTS,
+                        ENEMY_SMALL_DAMAGE
                 );
             }else if(type<0.8f){
                 enemy.set(enemyMediumRegions,
@@ -89,7 +93,8 @@ public class EnemyEmitter {
                         ENEMY_MEDIUM_BULLET_DAMAGE,
                         ENEMY_MEDIUM_RELOAD_INTERVAL,
                         ENEMY_MEDIUM_HEIGHT,
-                        ENEMY_MEDIUM_HEALTH_POINTS
+                        ENEMY_MEDIUM_HEALTH_POINTS,
+                        ENEMY_MEDIUM_DAMAGE
                 );
             }else{
                 enemy.set(enemyBigRegions,
@@ -100,7 +105,8 @@ public class EnemyEmitter {
                         ENEMY_BIG_BULLET_DAMAGE,
                         ENEMY_BIG_RELOAD_INTERVAL,
                         ENEMY_BIG_HEIGHT,
-                        ENEMY_BIG_HEALTH_POINTS
+                        ENEMY_BIG_HEALTH_POINTS,
+                        ENEMY_BIG_DAMAGE
                 );
             }
             enemy.pos.x = Rnd.nextFloat(worldBounds.getLeft() + enemy.getHalfWidth(), worldBounds.getRight() - enemy.getHalfWidth());
